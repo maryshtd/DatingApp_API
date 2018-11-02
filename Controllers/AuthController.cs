@@ -33,9 +33,9 @@ namespace DatingApp.API.Controllers
             //validate request
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
-            userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
-
+            
+            if (!string.IsNullOrEmpty(userForRegisterDto.Username))
+                userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
             var userToCreate = new User
             {
@@ -49,7 +49,7 @@ namespace DatingApp.API.Controllers
 
         [HttpPost("login")] //api/auth/login
         public async Task<IActionResult> Login([FromBody]UserForLoginDto userForLoginDto)
-        {
+        {            
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
 
             if (userFromRepo == null)
